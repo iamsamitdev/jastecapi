@@ -12,10 +12,9 @@ import javax.persistence.Table;
 public class User {
 
     // Constructure
-    public User() {
-
+    public User(){ 
     }
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -123,6 +122,7 @@ public class User {
     public void setStatus(int status) {
         this.status = status;
     }
+    
 
     @Override
     public String toString() {

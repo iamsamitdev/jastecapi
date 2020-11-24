@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itgenius.jastecapi.exception.ResourceNotFoundException;
 import com.itgenius.jastecapi.model.User;
 import com.itgenius.jastecapi.repository.UserRepository;
+import com.itgenius.jastecapi.service.RegistrationLoginService;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,6 +29,7 @@ public class UserController {
     
     @Autowired
     private UserRepository userRepository;
+    private RegistrationLoginService service;
     
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -73,5 +76,40 @@ public class UserController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+    
+    // Registration new user
+    @PostMapping("/register")
+    public String registerUser(@RequestBody User user) throws Exception{
+        
+        String tempUsername = user.getUsername();
+        
+        if(tempUsername != null && !"".equals(tempUsername)){
+            userRepository.save(user);
+            return "{\"code\":\"200\",\"status\":\"success\", \"message\":\"Register Success\"}";
+        }else{
+            return "{\"code\":\"400\",\"status\":\"fail\", \"message\":\"Register Fail\"}";
+        }
+        
+    }
+    
+    // Login
+    @PostMapping("/login")
+    public Optional<User> loginUser(@RequestBody User user)  throws Exception{
+        String tempUsername = user.getUsername();
+        String tempPass = user.getPassword();
+//        System.out.println(tempUsername);
+//        System.out.println(tempPass);
+        Optional<User> userObj = null;
+        if(tempUsername != null && tempPass != null){
+//              userObj = service.findByUsernameAndPassword(tempUsername, tempPass);
+        }
+        
+        if(userObj == null){
+             throw new Exception("Bad credentials");
+        }
+//        System.out.println(userObj);
+        return userObj;
+    }
+    
     
 }
